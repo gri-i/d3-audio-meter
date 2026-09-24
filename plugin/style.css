@@ -1,0 +1,57 @@
+/* Audio Meter layout on top of disguise-ui.css (the shared GUI guideline).
+   Canvas code reads the colours below, so keep them literal. */
+:root {
+  --bg: #323232;       /* --d3-panel */
+  --line: #424242;     /* --d3-divider */
+  --field: #494949;    /* --d3-field: empty meter tracks */
+  --text: #ffffff;
+  --muted: #a0a0a0;
+  --graph-lo: #727272;
+  --graph-hi: #f1f1f1;
+  --ok: #7fff7f;
+  --warn: #ffdf7f;
+  --hot: #ff7f7f;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; overflow: hidden; }
+
+/* Bars wrap instead of clipping when the window gets narrow. */
+header, footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  padding: 4px 6px;
+  border-bottom: 2px solid var(--line);
+}
+footer { border-top: 2px solid var(--line); border-bottom: 0; flex-wrap: nowrap; }
+.dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--hot); }
+.dot.on { background: var(--ok); }
+#deviceSelect { flex: 1 1 120px; min-width: 0; margin: 0; text-align: left; }
+.buttons { display: flex; gap: 4px; margin-left: auto; }
+#resetPeaks.active { background: var(--hot); color: var(--d3-on-light); }
+#settings { flex-wrap: nowrap; gap: 6px; border-bottom: 2px solid var(--line); }
+#settings[hidden] { display: none; }
+#agent { flex: 1; min-width: 0; text-align: left; }
+#errorBar[hidden] { display: none; }
+
+main { flex: 1; display: flex; min-height: 0; gap: 2px; background: var(--line); }
+section { background: var(--bg); position: relative; min-width: 0; }
+.meters { flex: 0 0 auto; width: 110px; max-width: 50%; cursor: pointer; }
+.spectrum { flex: 1; }
+body.no-spectrum .spectrum { display: none; }
+body.no-spectrum .meters { flex: 1; max-width: none; }
+canvas { display: block; width: 100%; height: 100%; }
+#format { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; flex: 0 1 auto; }
+footer canvas { height: 10px; flex: 1 1 40px; min-width: 30px; }
+#corrValue { flex: none; width: 3.2em; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* LTC block (inputs only): hero timecode, status bar, collapsible statistics. */
+#ltcBar { border-bottom: 2px solid var(--line); padding-bottom: 2px; }
+#ltcBar[hidden] { display: none; }
+#ltcBar .d3-hero { padding-top: 2px; }
+#ltcBar .d3-section { min-height: 1.7em; }
+.d3-value.bad { color: var(--hot); }
+.ltc-event { color: var(--warn); padding: 0 10px 2px; }
+.ltc-event:empty { display: none; }

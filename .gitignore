@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+agent/agent.log
+
+# Generated test signals (~50 MB) — recreate with tools/make_*.py.
+# The .txt cue sheets next to them stay in the repo as the expected results.
+test/*.wav

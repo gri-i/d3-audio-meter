@@ -1,0 +1,3 @@
+numpy
+PyAudioWPatch
+websockets>=13

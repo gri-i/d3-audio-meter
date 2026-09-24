@@ -1,0 +1,185 @@
+/* disguise UI guideline — base stylesheet.
+   Colours sampled from disguise Designer r32 widgets; see SKILL.md. */
+
+:root {
+  --d3-canvas: #535353;
+  --d3-panel: #323232;
+  --d3-divider: #424242;
+  --d3-field: #494949;
+  --d3-button: #555555;
+  --d3-track: #a2a2a2;
+  --d3-text: #ffffff;
+  --d3-label: #a0a0a0;
+  --d3-graph-lo: #727272;
+  --d3-graph-hi: #f1f1f1;
+  --d3-ok: #7fff7f;
+  --d3-warn: #ffdf7f;   /* extension: same lightness as ok */
+  --d3-bad: #ff7f7f;    /* extension: same lightness as ok */
+  --d3-on-light: #323232;  /* text on any light fill (status bars, active buttons) */
+
+  --d3-font: "Noto Sans", "Open Sans", "Segoe UI", system-ui, sans-serif;
+  --d3-size: clamp(12px, 2.6vmin, 17px);  /* rows and labels; legible floor */
+  --d3-row-h: 2em;
+  --d3-pad: 10px;
+}
+
+.d3-app {
+  margin: 0;
+  background: var(--d3-canvas);
+  color: var(--d3-text);
+  font: var(--d3-size)/1.3 var(--d3-font);
+}
+/* Plugin pages live inside a Designer widget already: use the panel colour. */
+.d3-app.d3-embedded { background: var(--d3-panel); }
+
+.d3-widget {
+  background: var(--d3-panel);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+/* ---- title bar ---- */
+.d3-titlebar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 0;
+  font-size: 1.08em;
+  text-align: center;
+}
+.d3-close {
+  width: 1.4em; height: 1.4em;
+  border: 0; border-radius: 50%;
+  background: var(--d3-text);
+  color: var(--d3-panel);
+  font: bold 0.9em/1 var(--d3-font);
+  cursor: pointer;
+}
+.d3-close::before { content: "✕"; }
+.d3-iconbtn, .d3-button {
+  min-width: 1.6em; height: 1.6em;
+  padding: 0 0.4em;
+  border: 0; border-radius: 3px;
+  background: var(--d3-button);
+  color: var(--d3-text);
+  font: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.d3-iconbtn:hover, .d3-button:hover { background: #666; }
+.d3-button.on { background: var(--d3-text); color: var(--d3-panel); }
+
+/* ---- hero readout + caption ---- */
+.d3-hero {
+  text-align: center;
+  font-size: clamp(22px, 9vmin, 44px);
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.d3-hero.stale { color: var(--d3-label); }
+.d3-caption { text-align: center; overflow-wrap: anywhere; }
+
+/* ---- status bar ---- */
+.d3-status {
+  margin: 2px;
+  min-height: 1.5em;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 6px;
+  background: var(--d3-divider);
+  color: var(--d3-text);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+/* Light fills get dark text (the panel colour): white on pastel is unreadable. */
+.d3-status.ok, .d3-status.warn, .d3-status.bad { color: var(--d3-on-light); }
+.d3-status.ok { background: var(--d3-ok); }
+.d3-status.warn { background: var(--d3-warn); }
+.d3-status.bad { background: var(--d3-bad); }
+
+/* ---- collapsible sections ---- */
+.d3-section {
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: var(--d3-row-h);
+  padding: 0 var(--d3-pad);
+  border-top: 2px solid var(--d3-divider);
+  cursor: pointer;
+  user-select: none;
+}
+.d3-section::after { content: "▼"; font-size: 0.8em; }
+.d3-section.collapsed::after { content: "▶"; }
+.d3-section.collapsed + .d3-section-body { display: none; }
+
+/* ---- property rows ---- */
+.d3-row {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap;                 /* narrow window: value drops under label, never clipped */
+  gap: 2px 12px;
+  min-height: var(--d3-row-h);
+  padding: 0 var(--d3-pad);
+}
+.d3-label { color: var(--d3-label); }
+.d3-value { color: var(--d3-text); margin-left: auto; text-align: right; font-variant-numeric: tabular-nums; }
+.d3-field {
+  margin-left: auto;
+  min-width: 4.5em; height: 1.5em;
+  padding: 0 6px;
+  border: 0; border-radius: 2px;
+  background: var(--d3-field);
+  color: var(--d3-text);
+  font: inherit;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+select.d3-field { text-align: left; text-overflow: ellipsis; appearance: none; cursor: pointer; }
+.d3-field:focus { outline: 1px solid var(--d3-label); }
+
+/* A wrapping grid of label/value pairs for dense read-outs. */
+.d3-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5em, 1fr));
+  gap: 0 var(--d3-pad);
+  padding: 2px var(--d3-pad);
+}
+.d3-grid .d3-row { padding: 0; min-height: 1.6em; }
+
+/* ---- checkbox ---- */
+.d3-check {
+  appearance: none;
+  width: 1.5em; height: 1.5em;
+  margin: 0 0 0 auto;
+  background: var(--d3-field);
+  border-radius: 2px;
+  display: inline-grid; place-content: center;
+  cursor: pointer;
+}
+.d3-check:checked::before { content: "✕"; color: var(--d3-text); font-size: 1.1em; }
+
+/* ---- slider ---- */
+.d3-slider { display: flex; align-items: center; gap: 8px; padding: 0 var(--d3-pad); min-height: var(--d3-row-h); }
+.d3-slider .d3-track { width: 3em; height: 1.2em; background: var(--d3-track); }
+
+/* ---- centred sub-heading, +/- and action rows ---- */
+.d3-sub { text-align: center; color: var(--d3-label); padding-top: 4px; }
+.d3-pm { display: grid; grid-template-columns: 1fr 1fr; text-align: center; font-size: 1.3em; }
+.d3-pm > * { cursor: pointer; }
+.d3-action {
+  min-height: var(--d3-row-h);
+  display: flex; align-items: center; justify-content: center;
+  border-top: 2px solid var(--d3-divider);
+  cursor: pointer;
+}
+.d3-action:hover { background: #3a3a3a; }
+
+/* ---- messages ---- */
+.d3-banner {
+  padding: 4px var(--d3-pad);
+  background: #4a2e2e;
+  color: #ffd0d0;
+  border-top: 2px solid var(--d3-bad);
+  overflow-wrap: anywhere;
+}
+.d3-muted { color: var(--d3-label); }
+.nw { white-space: nowrap; }
