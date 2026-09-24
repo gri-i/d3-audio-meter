@@ -13,34 +13,34 @@
 </head>
 <body class="d3-app d3-embedded">
 <header>
-  <span id="status" class="dot off" title="Связь с агентом"></span>
-  <select id="deviceSelect" class="d3-field" title="Устройство"></select>
+  <span id="status" class="dot off" title="Connection to the agent"></span>
+  <select id="deviceSelect" class="d3-field" title="Device"></select>
   <div class="buttons">
-    <button id="toggleSpectrum" class="d3-button" title="Показать/скрыть спектр">FFT</button>
-    <button id="resetPeaks" class="d3-button" title="Сбросить пики, клип и счётчики LTC">Сброс</button>
-    <button id="toggleSettings" class="d3-button" title="Настройки подключения">⚙</button>
+    <button id="toggleSpectrum" class="d3-button" title="Show/hide spectrum">FFT</button>
+    <button id="resetPeaks" class="d3-button" title="Reset peaks, clip and LTC counters">Reset</button>
+    <button id="toggleSettings" class="d3-button" title="Connection settings">⚙</button>
   </div>
 </header>
 <div id="settings" class="d3-row" hidden>
-  <span class="d3-label">Агент</span>
+  <span class="d3-label">Agent</span>
   <input id="agent" class="d3-field" spellcheck="false">
-  <button id="reconnect" class="d3-button">Подключить</button>
+  <button id="reconnect" class="d3-button">Connect</button>
 </div>
 <div id="errorBar" class="d3-banner" hidden></div>
 <div id="ltcBar" hidden>
   <div id="ltcTc" class="d3-hero stale">--:--:--:--</div>
   <div id="ltcStatus" class="d3-status">—</div>
-  <div id="ltcSection" class="d3-section">Статистика LTC</div>
+  <div id="ltcSection" class="d3-section">LTC statistics</div>
   <div class="d3-section-body">
     <div class="d3-grid">
-      <div class="d3-row nw"><span class="d3-label">Частота</span><span class="d3-value" id="ltcRate">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">Канал</span><span class="d3-value" id="ltcCh">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">Уровень</span><span class="d3-value" id="ltcLevel">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">Потеряно</span><span class="d3-value" id="ltcLost">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">За минуту</span><span class="d3-value" id="ltcMinute">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">Скачки</span><span class="d3-value" id="ltcJumps">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">Пропадания</span><span class="d3-value" id="ltcDrops">—</span></div>
-      <div class="d3-row nw"><span class="d3-label">Дрожание</span><span class="d3-value" id="ltcJitter">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Frame rate</span><span class="d3-value" id="ltcRate">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Channel</span><span class="d3-value" id="ltcCh">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Level</span><span class="d3-value" id="ltcLevel">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Lost</span><span class="d3-value" id="ltcLost">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Last minute</span><span class="d3-value" id="ltcMinute">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Jumps</span><span class="d3-value" id="ltcJumps">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Dropouts</span><span class="d3-value" id="ltcDrops">—</span></div>
+      <div class="d3-row nw"><span class="d3-label">Jitter</span><span class="d3-value" id="ltcJitter">—</span></div>
     </div>
     <div id="ltcEvent" class="d3-caption ltc-event"></div>
   </div>
@@ -55,8 +55,8 @@
 </main>
 <footer>
   <span id="format" class="d3-muted"></span>
-  <span class="d3-muted nw" title="Стереокорреляция">Корр.</span>
-  <canvas id="corr" title="Стереокорреляция: +1 моно, 0 широкое стерео, &lt;0 противофаза"></canvas>
+  <span class="d3-muted nw" title="Stereo correlation">Corr.</span>
+  <canvas id="corr" title="Stereo correlation: +1 mono, 0 wide stereo, &lt;0 out of phase"></canvas>
   <span id="corrValue">—</span>
 </footer>
 <script src="app.js"></script>

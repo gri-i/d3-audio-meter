@@ -18,22 +18,21 @@ styled like a native Designer widget.
 - Stereo correlation (+1 mono, 0 wide, < 0 out of phase)
 
 **Inputs — LTC timecode monitoring** (the channel carrying LTC is found automatically)
-- Large timecode readout and status: `LTC OK` / `НЕСТАБИЛЬНО` (unstable) /
-  `ПЕРЕГРУЗ` (overload, peak above −1 dBFS) / `СЛАБЫЙ` (weak, below −40 dBFS) /
-  `НЕТ СИГНАЛА` (no signal, with a live count of missing frames)
+- Large timecode readout and status: `LTC OK` / `UNSTABLE` (an event in the last
+  10 s) / `OVERLOAD` (peak above −1 dBFS) / `WEAK` (below −40 dBFS) /
+  `NO SIGNAL` (with a live count of missing frames)
 - Frame rate: 23.976 / 24 / 25 / 29.97 DF / 30
 - **Lost frames** since reset, as a count and a percentage, plus losses in the last minute
-- Jumps with their size (`скачок +250 кадров (+10.00 с)`, confirmed by two
-  consecutive frames so a single corrupted frame is not reported as a jump),
-  repeated frames, dropouts with their length (`пропало 27 кадров (1.08 с)`)
+- Jumps with their size (`jump +250 frames (+10.00 s): expected 10:00:20:00, got 10:00:30:00`,
+  confirmed by two consecutive frames so a single corrupted frame is not reported
+  as a jump), repeated frames, dropouts with their length
+  (`signal back at 10:00:41:01: 27 frames lost (1.08 s)`)
 - Edge jitter as a signal-quality figure
 
 **Plugin window**
 - Opens compact (420×260) and is resizable; text wraps or scales instead of being cut off
 - Several plugin windows can watch different devices at the same time
 - Device errors (e.g. missing microphone permission) are shown in full
-
-The UI text is in Russian.
 
 ## How it works
 
@@ -98,7 +97,7 @@ python tools/make_ltc_wav.py --fps 24
 ```
 
 Play them through a virtual cable (e.g. VB-Cable) or from a Designer timeline.
-Expected results are in `test/*.txt`.
+Expected results are in `test/*.txt` (in Russian).
 
 ## Project layout
 

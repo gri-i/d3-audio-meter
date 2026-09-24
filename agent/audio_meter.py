@@ -115,8 +115,8 @@ def list_devices(pa):
 
 
 MIC_CONSENT = r"Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone"
-MIC_HELP = ("Windows не даёт Python доступ ко входам. Параметры → Конфиденциальность и защита → "
-            "Микрофон: включите доступ для Python / классических приложений, затем перезапустите агент.")
+MIC_HELP = ("Windows blocks Python from recording inputs. Settings → Privacy & security → "
+            "Microphone: allow access for Python / desktop apps, then restart the agent.")
 
 
 def _consent(root, path):
@@ -163,7 +163,7 @@ def open_with_timeout(open_fn, seconds):
     t.start()
     t.join(seconds)
     if t.is_alive():
-        raise OpenTimeout(f"устройство не открылось за {seconds:.0f} с")
+        raise OpenTimeout(f"device did not open within {seconds:.0f} s")
     if "error" in box:
         raise box["error"]
     return box["stream"]

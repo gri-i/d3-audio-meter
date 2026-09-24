@@ -223,10 +223,10 @@ class LtcDecoder:
                 self.jumps += 1
                 delta = _frame_index(self.pending, base, df) - _frame_index(old, base, df)
                 if delta == -1:
-                    what = "повтор кадра"
+                    what = "repeated frame"
                 else:
-                    what = f"скачок {delta:+d} кадров ({delta / self.rate:+.2f} с)"
-                self._event(f"{what}: ждали {_tc_str(old, df)}, пришло {_tc_str(self.pending, df)}")
+                    what = f"jump {delta:+d} frames ({delta / self.rate:+.2f} s)"
+                self._event(f"{what}: expected {_tc_str(old, df)}, got {_tc_str(self.pending, df)}")
                 self.pending = None
             else:
                 # Unconfirmed: either a corrupted frame or the first frame of a jump.
@@ -240,7 +240,7 @@ class LtcDecoder:
             self._lose(gap)
             self.good += 1
             rate = self.rate or self.sr / self.frame_len
-            self._event(f"сигнал вернулся на {_tc_str(tc, df)}: пропало {gap} кадров ({gap / rate:.2f} с)")
+            self._event(f"signal back at {_tc_str(tc, df)}: {gap} frames lost ({gap / rate:.2f} s)")
         else:
             self.good += 1
 
@@ -257,7 +257,7 @@ class LtcDecoder:
             self.locked = False
             self.frame_pos = []
             self.dropouts += 1
-            self._event(f"пропал сигнал после {_tc_str(self.tc, self.df)}")
+            self._event(f"signal lost after {_tc_str(self.tc, self.df)}")
 
     def _lose(self, n):
         if n > 0:

@@ -53,7 +53,7 @@ function connect() {
   ws.onmessage = (e) => onMessage(JSON.parse(e.data));
   ws.onclose = () => {
     $("status").classList.remove("on");
-    $("format").textContent = `нет подключения к ${agent}, повтор…`;
+    $("format").textContent = `no connection to ${agent}, retrying…`;
     retryTimer = setTimeout(connect, 2000);
   };
 }
@@ -111,12 +111,12 @@ function savedDevice() {
 function fillDevices(msg) {
   const sel = $("deviceSelect");
   sel.replaceChildren();
-  const groups = { out: "Выходы", in: "Входы (LTC)" };
+  const groups = { out: "Outputs", in: "Inputs (LTC)" };
   for (const kind of ["out", "in"]) {
     const g = document.createElement("optgroup");
     g.label = groups[kind];
     for (const d of msg.devices.filter((x) => x.kind === kind)) {
-      g.append(new Option(d.id === msg.default ? `${d.name} (системное)` : d.name, d.id));
+      g.append(new Option(d.id === msg.default ? `${d.name} (system default)` : d.name, d.id));
     }
     if (g.children.length) sel.append(g);
   }
@@ -171,18 +171,18 @@ function renderLtc() {
   if ($("ltcBar").hidden) return;
   const l = state.ltc, base = state.ltcBase;
   const status = $("ltcStatus");
-  let cls = "bad", text = "LTC не найден";
+  let cls = "bad", text = "NO LTC FOUND";
   if (l) {
     const d = (k) => l[k] - (base ? base[k] : 0);
     const ch = l.ch;
     const peak = state.maxPeak[ch], now = state.peak[ch];
     const recentEvent = l.lastEvent && l.lastEvent.ago < LTC_RECENT_S;
     const recentBad = Date.now() - state.ltcBadAt < LTC_RECENT_S * 1000;
-    if (!l.locked) { cls = "bad"; text = `НЕТ СИГНАЛА · ${l.missing} кадр.`; }
+    if (!l.locked) { cls = "bad"; text = `NO SIGNAL · ${l.missing} frames`; }
     // LTC has no business near full scale: -1 dBFS already risks clipped edges.
-    else if (peak > LTC_HOT_DB) { cls = "warn"; text = "ПЕРЕГРУЗ"; }
-    else if (recentEvent || recentBad) { cls = "warn"; text = "НЕСТАБИЛЬНО"; }
-    else if (now < -40) { cls = "warn"; text = "СЛАБЫЙ"; }
+    else if (peak > LTC_HOT_DB) { cls = "warn"; text = "OVERLOAD"; }
+    else if (recentEvent || recentBad) { cls = "warn"; text = "UNSTABLE"; }
+    else if (now < -40) { cls = "warn"; text = "WEAK"; }
     else { cls = "ok"; text = "LTC OK"; }
 
     $("ltcTc").textContent = l.tc + (l.reverse ? " ◀" : "");
@@ -199,12 +199,12 @@ function renderLtc() {
     setVal("ltcDrops", d("dropouts"), d("dropouts") > 0);
     setVal("ltcJitter", l.locked ? `${l.jitter}%` : "—");
     $("ltcEvent").textContent = l.lastEvent && l.lastEvent.ago < 120
-      ? `${Math.round(l.lastEvent.ago)} с назад: ${l.lastEvent.text}` : "";
+      ? `${Math.round(l.lastEvent.ago)} s ago: ${l.lastEvent.text}` : "";
   } else {
     $("ltcTc").textContent = "--:--:--:--";
     $("ltcTc").classList.add("stale");
     for (const id of ["ltcRate", "ltcCh", "ltcLevel", "ltcLost", "ltcMinute", "ltcJumps", "ltcDrops", "ltcJitter"]) setVal(id, "—");
-    $("ltcEvent").textContent = "ищу таймкод на всех каналах…";
+    $("ltcEvent").textContent = "searching all channels for timecode…";
   }
   status.className = `d3-status ${cls}`;
   status.textContent = text;
