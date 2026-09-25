@@ -14,6 +14,7 @@ device that somebody is watching and stops it when the last window leaves.
 
 import argparse
 import asyncio
+import ctypes
 import json
 import mimetypes
 import queue
@@ -154,10 +155,13 @@ def open_with_timeout(open_fn, seconds):
     box = {}
 
     def run():
+        ctypes.windll.ole32.CoInitializeEx(None, 0)  # COINIT_MULTITHREADED; see DeviceStream._run
         try:
             box["stream"] = open_fn()
         except Exception as e:  # reported to the caller below
             box["error"] = e
+        finally:
+            ctypes.windll.ole32.CoUninitialize()
 
     t = threading.Thread(target=run, daemon=True)
     t.start()
@@ -195,14 +199,21 @@ class DeviceStream:
         self.send(self.clients, msg)
 
     def _run(self):
-        while not self.stop.is_set():
-            try:
-                self._capture()
-            except Exception as e:
-                print(f"Capture error ({self.name}): {e}")
-                self._publish({"type": "error", "message": f"{self.name}: {e}"})
-                # A hung open leaves its helper thread behind: retry rarely then.
-                self.stop.wait(30.0 if isinstance(e, OpenTimeout) else 2.0)
+        # WASAPI needs COM on the thread that opens the stream. Some Python builds
+        # (e.g. a plain python.org install, unlike the Microsoft Store one) don't
+        # initialize it implicitly, and PortAudio then fails to open with -9999.
+        ctypes.windll.ole32.CoInitializeEx(None, 0)  # COINIT_MULTITHREADED
+        try:
+            while not self.stop.is_set():
+                try:
+                    self._capture()
+                except Exception as e:
+                    print(f"Capture error ({self.name}): {e}")
+                    self._publish({"type": "error", "message": f"{self.name}: {e}"})
+                    # A hung open leaves its helper thread behind: retry rarely then.
+                    self.stop.wait(30.0 if isinstance(e, OpenTimeout) else 2.0)
+        finally:
+            ctypes.windll.ole32.CoUninitialize()
 
     def _capture(self):
         # WASAPI shared mode: loopback must run at the device's mix format.
