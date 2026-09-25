@@ -50,10 +50,22 @@ can be checked in a normal browser.
 ## Requirements
 
 - Windows 10/11 (WASAPI)
-- Python 3.10+
+- Python 3.11 x64, registered with the `py` launcher (`py -3.11`)
 - disguise Designer with plugin support (tested with r32.4)
 
 ## Setup
+
+On a server with no internet access, run:
+
+```bash
+install_agent.bat
+```
+
+It installs the pinned dependencies from the wheels already vendored in
+`agent/vendor/` (no PyPI access needed) and starts the agent. Run it again
+any time to reinstall or restart.
+
+With internet access, the ordinary way also works:
 
 ```bash
 pip install -r agent/requirements.txt
@@ -66,7 +78,7 @@ Start the agent in the background (no console window; log in `agent/agent.log`):
 start_agent.bat
 ```
 
-or in the foreground: `python agent/audio_meter.py [--port 8765]`.
+or in the foreground: `py -3.11 agent/audio_meter.py [--port 8765]`.
 
 Install the plugin: copy the `plugin` folder to `<project>/plugins/audio-meter/`
 (or to Designer's shared plugins folder) and open **Audio Meter** from the
@@ -107,6 +119,7 @@ Expected results are in `test/*.txt` (in Russian).
 | `agent/ltc.py` | SMPTE LTC decoder with loss / jump / dropout accounting |
 | `plugin/` | Designer plugin: `d3plugin.json`, page, `disguise-ui.css` (Designer look) |
 | `tools/` | test signal generators |
+| `install_agent.bat` | offline install of dependencies + start |
 | `start_agent.bat` | runs the agent in the background |
 
 ## License

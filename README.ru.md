@@ -52,10 +52,22 @@ Designer не отдаёт плагинам аудиобуферы, поэтом
 ## Требования
 
 - Windows 10/11 (WASAPI)
-- Python 3.10+
+- Python 3.11 x64, зарегистрированный в лаунчере `py` (`py -3.11`)
 - disguise Designer с поддержкой плагинов (проверено на r32.4)
 
 ## Установка
+
+На сервере без интернета:
+
+```bash
+install_agent.bat
+```
+
+Ставит зависимости из уже скачанных wheel-файлов в `agent/vendor/` (PyPI не
+трогает) и запускает агента. Можно запускать повторно — переустановит и
+перезапустит.
+
+При наличии интернета подойдёт и обычный способ:
 
 ```bash
 pip install -r agent/requirements.txt
@@ -68,7 +80,7 @@ python agent/audio_meter.py --list      # какие устройства вид
 start_agent.bat
 ```
 
-или в консоли: `python agent/audio_meter.py [--port 8765]`.
+или в консоли: `py -3.11 agent/audio_meter.py [--port 8765]`.
 
 Плагин: скопировать папку `plugin` в `<проект>/plugins/audio-meter/` (или в общую
 папку плагинов Designer) и открыть **Audio Meter** из меню плагинов. Плагин
@@ -109,6 +121,7 @@ python tools/make_ltc_wav.py --fps 24
 | `agent/ltc.py` | декодер SMPTE LTC с подсчётом потерь, скачков и пропаданий |
 | `plugin/` | плагин Designer: `d3plugin.json`, страница, `disguise-ui.css` (стиль Designer) |
 | `tools/` | генераторы тестовых сигналов |
+| `install_agent.bat` | офлайн-установка зависимостей + запуск |
 | `start_agent.bat` | запуск агента в фоне |
 
 ## Лицензия
